@@ -1,8 +1,8 @@
 # Fleeting Jobs — Frontend
 
-A SvelteKit dashboard UI for an AI-powered job search platform. This is a **frontend-only prototype** with placeholder data, built to match the visual style of the `/example-ui` design reference (layout, theme, typography, and components).
+A SvelteKit dashboard UI for an AI-powered job search platform, built to match the visual style of the `/example-ui` design reference (layout, theme, typography, and components).
 
-It is intended to be connected to a Spring Boot backend later. No API calls, authentication, or business logic are implemented.
+The **Companies** module is connected to the Spring Boot backend. Other pages still use placeholder data.
 
 ## Features
 
@@ -10,7 +10,7 @@ It is intended to be connected to a Spring Boot backend later. No API calls, aut
 - **Job Search** — search, filters, job cards, resume/cover letter modals, pagination
 - **Resume Generator** — template selection and preview UI
 - **Applications** — trackable table with status badges and filtering
-- **Parsers** — manage company job page parsers
+- **Companies** — full CRUD connected to the backend API
 - **Settings** — profile, templates, API keys placeholder, preferences (including dark mode)
 
 ## Tech stack
@@ -24,17 +24,32 @@ It is intended to be connected to a Spring Boot backend later. No API calls, aut
 
 - Node.js 18+
 - npm
+- Spring Boot backend running (see backend project)
+- PostgreSQL (via backend `docker-compose`)
 
 ## Getting started
 
+### 1. Start the backend
+
 ```bash
-# From the project root
+cd fleeting-jobs-backend/fleeting-jobs-backend
+docker compose up -d
+./mvnw spring-boot:run
+```
+
+### 2. Configure the frontend
+
+```bash
 cd frontend
+cp .env.example .env
+```
 
-# Install dependencies
+`.env` defaults to `PUBLIC_API_BASE_URL=http://localhost:8080`.
+
+### 3. Run the frontend
+
+```bash
 npm install
-
-# Start the dev server
 npm run dev
 ```
 
@@ -54,8 +69,9 @@ Open [http://localhost:5173](http://localhost:5173). The app redirects `/` to `/
 ```
 src/
 ├── lib/
-│   ├── components/   # Reusable UI (common, dashboard, jobs, applications, parser, resume)
-│   ├── data/         # Dummy data (jobs, applications, parsers, etc.)
+│   ├── api/          # API client (companies)
+│   ├── components/   # Reusable UI (common, company, dashboard, jobs, etc.)
+│   ├── data/         # Placeholder data for unconnected pages
 │   ├── stores/       # Layout state (sidebar, theme, mobile menu)
 │   └── types/        # TypeScript types
 └── routes/
@@ -64,24 +80,34 @@ src/
 
 ## Routes
 
-| Path | Page |
-|------|------|
-| `/` | Redirects to `/dashboard` |
-| `/dashboard` | Overview and recent activity |
-| `/jobs` | Job search and results |
-| `/resume` | Resume generator |
-| `/applications` | Application tracker |
-| `/parsers` | Parser management |
-| `/settings` | Account and preferences |
+| Path | Page | Data source |
+|------|------|-------------|
+| `/` | Redirects to `/dashboard` | — |
+| `/dashboard` | Overview and recent activity | Placeholder |
+| `/jobs` | Job search and results | Placeholder |
+| `/resume` | Resume generator | Placeholder |
+| `/applications` | Application tracker | Placeholder |
+| `/companies` | Company management | **Backend API** |
+| `/parsers` | Redirects to `/companies` | — |
+| `/settings` | Account and preferences | Placeholder |
+
+## Company API integration
+
+The companies module calls these backend endpoints:
+
+| Method | Endpoint | Action |
+|--------|----------|--------|
+| `GET` | `/companies/list` | List all companies |
+| `GET` | `/companies/get/{id}` | Get company by ID |
+| `POST` | `/companies/create` | Create company |
+| `PUT` | `/companies/update/{id}` | Update company |
+| `DELETE` | `/companies/delete/{id}` | Delete company |
+
+Client-side and server-side validation errors from the backend are surfaced in the create/edit form.
 
 ## Out of scope
 
-This prototype does **not** include:
-
-- Backend or REST API integration
 - Authentication
 - Real AI resume/cover letter generation
 - PDF export
-- Parser execution or job application submission
-
-All interactions use local placeholder data from `src/lib/data/`.
+- Job search, applications, and parser execution APIs

@@ -4,7 +4,7 @@
 		Search,
 		FileText,
 		Briefcase,
-		Bot,
+		Building2,
 		Settings,
 		ChevronLeft,
 		ChevronRight,
@@ -19,7 +19,7 @@
 		search: Search,
 		'file-text': FileText,
 		briefcase: Briefcase,
-		bot: Bot,
+		building: Building2,
 		settings: Settings
 	};
 
