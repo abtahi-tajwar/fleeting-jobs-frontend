@@ -22,6 +22,7 @@ export interface Job {
 	remote: boolean;
 	experience: string;
 	datePosted: string;
+	url?: string;
 	saved?: boolean;
 }
 

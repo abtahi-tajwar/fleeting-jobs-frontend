@@ -1,4 +1,4 @@
-import type { APIErrorResponse, APIListResponse, APIPostResponse } from './types';
+import type { APIErrorResponse, APIGetResponse, APIListResponse, APIPostResponse } from './types';
 
 export class ApiError extends Error {
 	status: number;
@@ -35,6 +35,17 @@ export async function apiGetList<T> (path: string): Promise<T[]> {
 
 	if (!body.success) {
 		throw new ApiError(response.status, 'Request was not successful');
+	}
+
+	return body.data;
+}
+
+export async function apiGetData<T> (path: string): Promise<T> {
+	const response = await fetch(`${API_BASE_URL}${path}`);
+	const body = await parseResponse<APIGetResponse<T>>(response);
+
+	if (!body.success) {
+		throw new ApiError(response.status, body.message ?? 'Request was not successful');
 	}
 
 	return body.data;

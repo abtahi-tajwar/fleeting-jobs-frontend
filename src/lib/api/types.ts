@@ -3,6 +3,12 @@ export interface APIListResponse<T> {
 	data: T[];
 }
 
+export interface APIGetResponse<T> {
+	success: boolean;
+	data: T;
+	message?: string;
+}
+
 export interface APIPostResponse<T> {
 	success: boolean;
 	data: T;

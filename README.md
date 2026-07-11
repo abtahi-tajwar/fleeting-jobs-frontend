@@ -2,7 +2,7 @@
 
 A SvelteKit dashboard UI for an AI-powered job search platform, built to match the visual style of the `/example-ui` design reference (layout, theme, typography, and components).
 
-The **Companies** module is connected to the Spring Boot backend. Other pages still use placeholder data.
+The **Companies** and **Job Search** modules are connected to the Spring Boot backend. Other pages still use placeholder data.
 
 ## Features
 
@@ -84,7 +84,7 @@ src/
 |------|------|-------------|
 | `/` | Redirects to `/dashboard` | — |
 | `/dashboard` | Overview and recent activity | Placeholder |
-| `/jobs` | Job search and results | Placeholder |
+| `/jobs` | Job search and results | **Backend API** (enriched with placeholders) |
 | `/resume` | Resume generator | Placeholder |
 | `/applications` | Application tracker | Placeholder |
 | `/companies` | Company management | **Backend API** |
@@ -104,6 +104,18 @@ The companies module calls these backend endpoints:
 | `DELETE` | `/companies/delete/{id}` | Delete company |
 
 Client-side and server-side validation errors from the backend are surfaced in the create/edit form.
+
+## Jobs API integration
+
+The job search page calls `GET /jobs/list`. The API currently returns `id`, `title`, and `url` only. The frontend enriches each item with static placeholder values for fields the UI still expects:
+
+| API field | UI fields filled statically |
+|-----------|----------------------------|
+| `id`, `title`, `url` | Used directly |
+| — | `company` (derived from job URL hostname) |
+| — | `location`, `employmentType`, `salary`, `experience`, `description`, `datePosted`, `remote` |
+
+Apply opens the job listing URL from the API. Search and filters run client-side on the enriched data.
 
 ## Out of scope
 
