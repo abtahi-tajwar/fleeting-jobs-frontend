@@ -5,6 +5,7 @@
 		FileText,
 		Briefcase,
 		Building2,
+		Bot,
 		Settings,
 		ChevronLeft,
 		ChevronRight,
@@ -20,6 +21,7 @@
 		'file-text': FileText,
 		briefcase: Briefcase,
 		building: Building2,
+		bot: Bot,
 		settings: Settings
 	};
 
